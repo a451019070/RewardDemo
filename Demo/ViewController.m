@@ -8,6 +8,11 @@
 
 #import "ViewController.h"
 
+
+CGFloat const unitPrice = 20;
+CGFloat const awardRate = 0.9;
+
+
 @interface ViewController ()
 
 @property (nonatomic, assign) CGFloat subRemaining;
@@ -35,20 +40,21 @@
 
 
 - (void)planA{//每次奖励都是小额的,净赚基本维持在0.1
+    CGFloat subRemaining = 0,subaward = 0,subMoney = 0;
+    
     for (int i = 0; i<500; i++) {
-        CGFloat onceMoney = 20;
-        self.subRemaining += onceMoney;
-        self.subMoney += onceMoney;
-        NSInteger maxBounds = MIN((self.subMoney*0.9-self.subBonus)-1, 519);
-        int bounds = 2 +  (arc4random() % maxBounds);
+        subRemaining += unitPrice;
+        subMoney += unitPrice;
+        CGFloat maxAvailable = subMoney*awardRate-subaward;//奖池剩余
+        NSInteger maxBounds = MIN(maxAvailable, 520);
+        int bounds = 2 +  (arc4random() % (maxBounds-1));
         
         
-        self.subBonus += bounds;
-        self.subRemaining -= bounds;
-        
-        NSLog(@"单次奖励:%d,奖励上限:%ld,剩余奖池:%lf",bounds,maxBounds,self.subRemaining);
+        subaward += bounds;
+        subRemaining -= bounds;
+        NSLog(@"单次奖励:%d,奖励上限:%ld,剩余金额:%lf",bounds,maxBounds,subRemaining);
     }
-    NSLog(@"!!!!!累计奖励:%lf,剩余金额:%lf",self.subBonus,self.subRemaining);
+    NSLog(@"!!!!!累计奖励:%lf,剩余金额:%lf,累计金额:%lf",subaward,subRemaining,subMoney);
 }
 
 
